@@ -44,9 +44,10 @@ def main():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
-                location = p.mouse.get_pos # (x,y) location of mouse
-                col = location[0] // SQ_SIZE # double divide to get integers
-                row = location[1] // SQ_SIZE
+                location = p.mouse.get_pos() # (x,y) location of mouse
+                col = int(location[0] // SQ_SIZE) # double divide to get integers, also need int() to ensure they are integers!
+                row = int(location[1] // SQ_SIZE)
+                
                 if sqSelected == (row,col): # check if user clicked the same square twice, this is typically to undo
                     sqSelected = () # deselect if we select the same square twice
                     playerClicks = [] # clear player click
@@ -54,7 +55,11 @@ def main():
                     sqSelected = (row,col)
                     playerClicks.append(sqSelected) # append for both 1st and 2nd clicks
                 if len(playerClicks) == 2: #after the 2nd click, now we want to make our move!
-                    
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    print(move.getChessNotation())
+                    gs.makeMove(move)
+                    sqSelected = () # reset user clicks
+                    playerClicks = [] # reset user clicks
 
 
                 
