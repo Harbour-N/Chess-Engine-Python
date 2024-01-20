@@ -23,12 +23,25 @@ class GameState():
 
         self.whiteToMove = True
         self.moveLog = []
-
+    '''
+    Takes a Move as a parameter and exectutes it (this will not work for castling, enpassant and pawn promotion)
+    '''
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--" # when you move a piece the starting square becomes empty
         self.board[move.endRow][move.endCol] = move.pieceMoved # the square where the piece is moved to is now occupied
         self.moveLog.append(move) # log move to display / undo
         self.whiteToMove = not self.whiteToMove # swap players
+
+    '''
+    Undo the last move
+    '''
+    def undoMove(self):
+        if len(self.moveLog) != 0: # 1st make sure there is a move to undo
+            move = self.moveLog.pop() # pop removes last entry
+            self.board[move.startRow][move.startCol] = move.pieceMoved # put the piece moved back to its original square
+            self.board[move.endRow][move.endCol] = move.pieceCaptured # put captured piece back to original square
+            self.whiteToMove = not self.whiteToMove # undo whose turn it is
+
 
 class Move():
     #map keys to values
